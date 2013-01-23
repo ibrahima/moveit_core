@@ -742,6 +742,51 @@ void planning_scene::PlanningScene::saveGeometryToStream(std::ostream &out) cons
   out << "." << std::endl;
 }
 
+void planning_scene::PlanningScene::loadGeometryFromStream(std::istream &in, Eigen::Translation3d trans, Eigen::Quaterniond rot)
+{
+  if (!in.good() || in.eof())
+    return;  
+  std::getline(in, name_);
+  do
+  {
+    std::string marker;
+    in >> marker;
+    if (!in.good() || in.eof())
+      return;
+    if (marker == "*")
+    {
+      std::string ns;
+      std::getline(in, ns);
+      if (!in.good() || in.eof())
+        return;  
+      unsigned int shape_count;
+      in >> shape_count;
+      for (std::size_t i = 0 ; i < shape_count && in.good() && !in.eof() ; ++i)
+      {
+        shapes::Shape *s = shapes::constructShapeFromText(in);
+        double x, y, z, rx, ry, rz, rw;
+        in >> x >> y >> z;
+        in >> rx >> ry >> rz >> rw;
+        float r, g, b, a;
+        in >> r >> g >> b >> a;
+        if (s)
+        {
+          Eigen::Affine3d pose = Eigen::Translation3d(x, y, z) * trans * Eigen::Quaterniond(rw, rx, ry, rz) * rot;
+          getCollisionWorld()->addToObject(ns, shapes::ShapePtr(s), pose);
+          if (r > 0.0f || g > 0.0f || b > 0.0f || a > 0.0f)
+          {
+            std_msgs::ColorRGBA color;
+            color.r = r; color.g = g; color.b = b; color.a = a;
+            setColor(ns, color);
+          }
+        }
+      }
+    }
+    else
+      break;
+  } while (true);
+}
+
 void planning_scene::PlanningScene::loadGeometryFromStream(std::istream &in)
 {
   if (!in.good() || in.eof())

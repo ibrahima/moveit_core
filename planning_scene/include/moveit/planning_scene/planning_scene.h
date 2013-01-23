@@ -305,6 +305,9 @@ public:
 
   /** \brief Load the geometry of the planning scene from a stream */
   void loadGeometryFromStream(std::istream &in);
+
+  /** \brief Load the geometry of the planning scene from a stream with offsets*/
+  void loadGeometryFromStream(std::istream &in, Eigen::Translation3d trans, Eigen::Quaterniond rot);
   
   /** \brief Fill the message \e scene with the differences between this instance of PlanningScene with respect to the parent.
       If there is no parent, everything is considered to be a diff and the function behaves like getPlanningSceneMsg() */
