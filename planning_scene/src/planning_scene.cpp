@@ -37,6 +37,8 @@
 #include <moveit/planning_scene/planning_scene.h>
 #include <moveit/collision_detection_fcl/collision_world.h>
 #include <moveit/collision_detection_fcl/collision_robot.h>
+#include <moveit/collision_distance_field/hybrid_collision_world.h>
+#include <moveit/collision_distance_field/hybrid_collision_robot.h>
 #include <geometric_shapes/shape_operations.h>
 #include <moveit/collision_detection/collision_tools.h>
 #include <moveit/trajectory_processing/trajectory_tools.h>
@@ -91,7 +93,7 @@ planning_scene::PlanningScenePtr planning_scene::PlanningScene::diff(const movei
 planning_scene::PlanningScene::PlanningScene(void) : configured_(false)
 {
   name_ = DEFAULT_SCENE_NAME;
-  setCollisionDetectionTypes<collision_detection::CollisionWorldFCL, collision_detection::CollisionRobotFCL>();
+  setCollisionDetectionTypes<collision_detection::CollisionWorldHybrid, collision_detection::CollisionRobotHybrid>();
 }
 
 planning_scene::PlanningScene::PlanningScene(const PlanningSceneConstPtr &parent) : parent_(parent), configured_(false)
@@ -108,7 +110,7 @@ planning_scene::PlanningScene::PlanningScene(const PlanningSceneConstPtr &parent
   {
     logError("NULL parent scene specified. Ignoring.");
     name_ = DEFAULT_SCENE_NAME; 
-    setCollisionDetectionTypes<collision_detection::CollisionWorldFCL, collision_detection::CollisionRobotFCL>();
+    setCollisionDetectionTypes<collision_detection::CollisionWorldHybrid, collision_detection::CollisionRobotHybrid>();
   }
 }
 
