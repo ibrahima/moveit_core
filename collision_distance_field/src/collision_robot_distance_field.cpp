@@ -44,6 +44,16 @@ namespace collision_detection
 CollisionRobotDistanceField::CollisionRobotDistanceField(const kinematic_model::KinematicModelConstPtr& kmodel)
   : CollisionRobot(kmodel)
 {  
+
+  initialize(std::map<std::string, std::vector<CollisionSphere> >(),
+             DEFAULT_SIZE_X,
+             DEFAULT_SIZE_Y,
+             DEFAULT_SIZE_Z,
+             DEFAULT_USE_SIGNED_DISTANCE_FIELD,
+             DEFAULT_RESOLUTION,
+             DEFAULT_COLLISION_TOLERANCE,
+             DEFAULT_MAX_PROPOGATION_DISTANCE);
+
 }
 
 CollisionRobotDistanceField::CollisionRobotDistanceField(const kinematic_model::KinematicModelConstPtr& kmodel, 
